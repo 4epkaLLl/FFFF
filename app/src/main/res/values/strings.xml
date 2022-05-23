@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Final_prj</string>
+    <string name="cancel">отмена</string>
+    <string name="create">создать</string>
+    <string name="weight">грамм</string>
+    <string name="composition">состав</string>
+    <string name="enter_weight">масса</string>
+    <string name="calories">кал\100г</string>
+    <string name="enter_name">введите название</string>
+    <string name="add_products">добавьте продукты</string>
+    <string name="ok">ок</string>
+    <string-array name="ingredient_types">
+        <item>фрукт</item>
+        <item>овощь</item>
+        <item>молочное</item>
+        <item>говядина</item>
+        <item>рыба</item>
+        <item>свинина</item>
+    </string-array>
+    <string-array name="methods_of_cooking">
+        <item>жареный</item>
+        <item>вареный</item>
+        <item>без\u0020обработки</item>
+        <item>на\u0020пару</item>
+        <item>запеченый</item>
+    </string-array>
+    <string name="title_activity_main2">MainActivity2</string>
+    <string name="list_of_products_is_empty">ваш список продуктов пуст</string>
+    <string name="list_of_ingredients_is_empty">ваш список ингредиентов пуст</string>
+</resources>
