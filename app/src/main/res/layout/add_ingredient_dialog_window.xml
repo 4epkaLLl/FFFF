@@ -3,29 +3,49 @@
     android:layout_width="250dp"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
     <EditText
         android:id="@+id/add_ingredient_dialog_window.enter_name"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:textColor="@color/dark_grey"
         android:hint="@string/enter_name"
         android:gravity="center"/>
-    <LinearLayout
+    <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:columnCount="2">
+
         <EditText
             android:id="@+id/add_ingredient_dialog_window.enter_vrg_calories"
-            android:layout_weight="2"
-            android:layout_width="match_parent"
+            android:layout_width="146dp"
             android:layout_height="wrap_content"
-            android:hint="@string/calories" />
-    <Spinner
-        android:id="@+id/ingredient_type_spinner"
-        android:layout_weight="3"
-        android:layout_width="match_parent"
-        android:layout_marginRight="10dp"
-        android:layout_height="match_parent"/>
-    </LinearLayout>
+            android:layout_weight="2"
+            android:hint="@string/calories"
+            android:textColor="@color/dark_grey" />
 
+        <Spinner
+            android:id="@+id/ingredient_type_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="3" />
+        <Button
+            android:textColor="@color/dark_grey"
+            android:background="@drawable/dialog_button"
+            android:text="@string/cancel"
+            android:id="@+id/add_ingredient_dialog_window.cancel"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+        <Button
+            android:background="@drawable/dialog_button"
+            android:textColor="@color/dark_grey"
+            android:text="@string/ok"
+            android:id="@+id/add_ingredient_dialog_window.complete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </GridLayout>
 </LinearLayout>

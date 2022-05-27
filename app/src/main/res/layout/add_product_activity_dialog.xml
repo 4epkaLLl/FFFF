@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/enter_name"
         android:textSize="25sp"
+        android:textColor="@color/dark_grey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

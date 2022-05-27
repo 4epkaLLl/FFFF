@@ -1,10 +1,16 @@
 package com.example.ffff;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.CharArrayBuffer;
+import android.database.ContentObserver;
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
+import android.os.Bundle;
 
 import java.util.ArrayList;
 
@@ -92,6 +98,22 @@ public class DataBase {
             products_table.close();
         }
         return arr;
+    }
+    public void add_ingredient(Ingredient ingredient){
+        ContentValues cv = new ContentValues();
+        cv.put(name_column,ingredient.name);
+        cv.put(ingredients_caloriesPerGram_column,ingredient.calories_per_gram);
+        //select id from ingredient_types where ingredient_type = ""
+        Cursor crs = db.query(typeOfIngredient_table_name,
+                new String[]{id_column},
+                typeOfIngredient_ingredientType_column+" = ?",new String[]{"\""+ingredient.type_of_ingredient+"\""},
+                null,null,null);
+        crs.moveToFirst();
+        if(!crs.isAfterLast()){
+            System.out.println("ffff");
+            cv.put(ingredients_type_column,crs.getInt(0));
+        }
+        db.insert(ingredients_table_name,null,cv);
     }
     public ArrayList<String>get_types_of_ingredient(ArrayList<String>arr){
         Cursor ingredient_types_table =  db.query(typeOfIngredient_table_name,
