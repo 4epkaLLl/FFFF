@@ -27,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
         toIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Ingredient.ingredients_activity_is_opened = true;
                 Intent intent = new Intent(MainActivity.this, List_activity.class);
+                intent.putExtra(List_activity.type_arg,1);
                 startActivity(intent);
             }
         });
@@ -36,16 +36,10 @@ public class MainActivity extends AppCompatActivity {
         toProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Product.products_activity_is_opened = true;
                 Intent intent = new Intent(MainActivity.this, List_activity.class);
+                intent.putExtra(List_activity.type_arg,2);
                 startActivity(intent);
             }
         });
-    }
-    @Override
-    protected void onResume(){
-        super.onResume();
-        Ingredient.ingredients_activity_is_opened = false;
-        Product.products_activity_is_opened = false;
     }
 }

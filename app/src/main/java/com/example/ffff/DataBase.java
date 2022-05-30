@@ -103,16 +103,7 @@ public class DataBase {
         ContentValues cv = new ContentValues();
         cv.put(name_column,ingredient.name);
         cv.put(ingredients_caloriesPerGram_column,ingredient.calories_per_gram);
-        //select id from ingredient_types where ingredient_type = ""
-        Cursor crs = db.query(typeOfIngredient_table_name,
-                new String[]{id_column},
-                typeOfIngredient_ingredientType_column+" = ?",new String[]{"\""+ingredient.type_of_ingredient+"\""},
-                null,null,null);
-        crs.moveToFirst();
-        if(!crs.isAfterLast()){
-            System.out.println("ffff");
-            cv.put(ingredients_type_column,crs.getInt(0));
-        }
+        cv.put(ingredients_type_column, ingredient.type_of_ingredient_id);
         db.insert(ingredients_table_name,null,cv);
     }
     public ArrayList<String>get_types_of_ingredient(ArrayList<String>arr){

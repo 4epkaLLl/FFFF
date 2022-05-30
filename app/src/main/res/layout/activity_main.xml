@@ -11,7 +11,7 @@
     <CalendarView
         android:id="@+id/mainActivity.calendar"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="320dp"
         app:layout_constraintTop_toTopOf="parent"/>
     <TextView
         android:layout_width="match_parent"
@@ -34,9 +34,13 @@
             android:layout_height="match_parent"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
+            android:text="к продуктам"
+            android:textColor="@color/black"
             android:id="@+id/mainActivity.toProducts"
             android:layout_weight="1"/>
         <Button
+            android:text="к ингредиентам"
+            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="5dp"
