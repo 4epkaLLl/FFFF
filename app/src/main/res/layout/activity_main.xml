@@ -11,7 +11,7 @@
     <CalendarView
         android:id="@+id/mainActivity.calendar"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
+        android:layout_height="337dp"
         app:layout_constraintTop_toTopOf="parent"/>
     <TextView
         android:layout_width="match_parent"

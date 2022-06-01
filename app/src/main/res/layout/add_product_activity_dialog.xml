@@ -6,19 +6,56 @@
     android:layout_height="wrap_content">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/add_product_activity_dialog.enter_name"
+        android:layout_width="325dp"
+        android:layout_height="50dp"
+        android:hint="@string/enter_name"
+        android:textColor="@color/dark_grey"
+        android:textSize="20sp"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <GridLayout
+        app:layout_constraintLeft_toLeftOf="@id/add_product_activity_dialog.enter_name"
+        app:layout_constraintTop_toBottomOf="@id/add_product_activity_dialog.enter_name"
+        android:id="@+id/grid_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_name"
-        android:textSize="25sp"
-        android:textColor="@color/dark_grey"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Spinner
-        android:layout_width="55dp"
-        android:layout_height="55dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editText"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        >
+
+        <EditText
+            android:id="@+id/add_product_activity_dialog.enter_weight"
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_weight"
+            android:textColor="@color/dark_grey"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/add_product_activity_dialog.method_of_cook_spinner"
+            android:layout_width="145dp"
+            android:layout_height="55dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/add_product_activity_dialog.enter_name"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/add_product_activity_dialog.cancel_button"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:background="@drawable/dialog_button"
+            android:text="@string/cancel"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/add_product_activity_dialog.ok_button"
+            android:background="@drawable/dialog_button"
+            android:text="@string/ok"
+            android:textColor="@color/black" />
+    </GridLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,7 @@
     <string name="add_products">добавьте продукты</string>
     <string name="ok">ок</string>
     <string name="wrong_ingredient_fill">неверно заполнен ингредиент</string>
+    <string name="wrong_data_entered">неверно введены данные</string>
     <string-array name="ingredient_types">
         <item>фрукт</item>
         <item>овощь</item>

@@ -16,13 +16,14 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:columnCount="2">
+
         <TextView
             android:id="@+id/add_product_activity.composition"
             android:layout_width="205dp"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
             android:text="@string/composition"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:textSize="18sp" />
         <TextView
             android:id="@+id/add_product_activity.ingredients"
             android:layout_width="200dp"
