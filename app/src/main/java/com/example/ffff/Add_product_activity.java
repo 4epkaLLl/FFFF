@@ -21,12 +21,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Add_product_activity extends AppCompatActivity {
     DataBase db;
     Ingredient_in_product_list_adp ingredients_in_product_adp;
     ArrayAdapter<String>ingredients_adp;
+    EditText enter_name_in_dialog;
     EditText enter_name;
     EditText enter_weight;
     Spinner choose_method_of_cook;
@@ -60,7 +60,7 @@ public class Add_product_activity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 Dialog add_in_composition_dialog = new Dialog(Add_product_activity.this);
                 add_in_composition_dialog.setContentView(R.layout.add_product_activity_dialog);
-                enter_name = add_in_composition_dialog.findViewById(R.id.add_product_activity_dialog_enter_name);
+                enter_name_in_dialog = add_in_composition_dialog.findViewById(R.id.add_product_activity_dialog_enter_name);
                 choose_method_of_cook = add_in_composition_dialog.findViewById(R.id.add_product_activity_dialog_method_of_cook_spinner);
                 dialog_cancel_button = add_in_composition_dialog.findViewById(R.id.add_product_activity_dialog_cancel_button);
                 enter_weight = add_in_composition_dialog.findViewById(R.id.add_product_activity_dialog_enter_weight);
@@ -140,11 +140,10 @@ public class Add_product_activity extends AppCompatActivity {
     complete.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (composition.isEmpty() || enter_name.getText().equals(null))
+            if (composition.isEmpty() || enter_name.getText().toString().length() == 0)
                 Toast.makeText(Add_product_activity.this,R.string.wrong_product_fill,Toast.LENGTH_SHORT).show();
             else{
-                Product prod = db.add_product(enter_name.getText().toString(), composition);
-
+                db.add_product(enter_name.getText().toString(), composition);
                 Intent intent = new Intent(Add_product_activity.this,List_activity.class);
                 intent.putExtra(List_activity.type_arg,2);
                 startActivity(intent);
