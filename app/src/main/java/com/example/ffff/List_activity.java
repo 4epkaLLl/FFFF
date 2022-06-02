@@ -1,12 +1,10 @@
 package com.example.ffff;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Looper;
-import android.text.Layout;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,18 +14,12 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.fragment.app.DialogFragment;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class List_activity extends AppCompatActivity {
 
@@ -38,6 +30,7 @@ public class List_activity extends AppCompatActivity {
     FrameLayout ingredients_activity;
     TextView textView;
     Ingredient_list_adp list_adp;
+    int deleted_ingredient_index;
     public static final String type_arg = "TYPE";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +54,32 @@ public class List_activity extends AppCompatActivity {
                 } else {
                     searchView = findViewById(R.id.list_activity_search_view);
                 }
+                list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        deleted_ingredient_index = i;
+                        AlertDialog.Builder confirming_dialog_builder = new AlertDialog.Builder(new ContextThemeWrapper(List_activity.this, R.style.alert_dialog_style))
+                                .setMessage(R.string.are_you_sure).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Ingredient deleted_ingredient =(Ingredient) list_adp.getItem(deleted_ingredient_index);
+                                        db.remove_ingredient(deleted_ingredient);
+                                        ingredients.clear();
+                                        db.get_ingredients(ingredients);
+                                        list_adp.notifyDataSetChanged();
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                    }
+                                });
+                        AlertDialog confirming_dialog = confirming_dialog_builder.create();
+                        confirming_dialog.show();
+                        return true;
+                    }
+                });
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

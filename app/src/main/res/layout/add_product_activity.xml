@@ -5,18 +5,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/dark_grey">
-        <EditText
-            android:textColorHint="@color/grey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/enter_name" />
+    <EditText
+        android:id="@+id/add_product_activity.enter_name"
+        android:textColorHint="@color/grey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_name" />
     <GridLayout
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:columnCount="2">
-
         <TextView
             android:id="@+id/add_product_activity.composition"
             android:layout_width="205dp"
@@ -33,12 +33,14 @@
             android:text="@string/add_products"/>
         <ListView
             android:layout_row="1"
+            android:minHeight="55dp"
             android:layout_column="0"
             android:id="@+id/add_product_activity.ingredients_in_product"
             android:layout_width="210dp"
             android:layout_height="match_parent"
             />
         <ListView
+            android:minHeight="55dp"
             android:id="@+id/add_product_activity.ingredients_list"
             android:layout_width="200dp"
             android:layout_height="match_parent"

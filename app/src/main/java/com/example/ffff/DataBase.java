@@ -47,6 +47,7 @@ public class DataBase {
     private static final String ingredientsInProduct_idProduct_column = "id_product";
     private static final String ingredientsInProduct_idIngredient_column = "id_ingredient";
     private static final String ingredientsInProduct_methodOfCookId_column = "method_of_cook_id";
+    private static final String ingredientsInProduct_relativeWeight_column = "relative_weight";
 
     //Type_of_ingredient table
     private static final String typeOfIngredient_table_name = "Type_of_ingredient";
@@ -59,6 +60,9 @@ public class DataBase {
     public DataBase(Context context) {
         OpenHelper openHelper = new OpenHelper(context);
         db = openHelper.getWritableDatabase();
+    }
+    public void remove_ingredient(Ingredient in) {
+        db.delete(ingredients_table_name,name_column+"=?",new String[]{in.name});
     }
     public void get_ingredients(ArrayList<Ingredient> arr) {
         Cursor getIngredientsTable = db.query(ingredients_table_name,
@@ -108,6 +112,16 @@ public class DataBase {
         cv.put(ingredients_type_column, ingredient.type_of_ingredient_id);
         db.insert(ingredients_table_name,null,cv);
     }
+    public Product add_product(String name, ArrayList<Ingredient>composition){
+        ContentValues cv = new ContentValues();
+        long sum_weight = 0;
+        for (int i = 0; i< composition.size();i++){
+            sum_weight += composition.get(i).relWeight;
+        }
+        for (int i = 0; i< composition.size();i++){
+
+        }
+    }
     class OpenHelper extends SQLiteOpenHelper{
         private Context ctx;
         public OpenHelper(Context context){
@@ -131,6 +145,7 @@ public class DataBase {
                     ingredientsInProduct_idProduct_column + " INTEGER NOT NULL, " +
                     ingredientsInProduct_idIngredient_column + " INTEGER NOT NULL, " +
                     ingredientsInProduct_methodOfCookId_column + " INTEGER NOT NULL, " +
+                    ingredientsInProduct_relativeWeight_column + " FLOAT NOT NULL," +
                     "FOREIGN KEY("+ingredientsInProduct_methodOfCookId_column+") REFERENCES "+ methodOfCook_table_name+"("+id_column+"));";
             db.execSQL(query);
             query = "CREATE TABLE "+ productsInDay_table_name+" (" +
@@ -151,7 +166,7 @@ public class DataBase {
             query = "CREATE TABLE " +product_table_name+"(" +
                     id_column +" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     name_column + " TEXT NOT NULL UNIQUE, "+
-                    product_weight_column + " INTEGER, "+
+                    //product_weight_column + " INTEGER, "+
                     product_vrgCalories_column + " REAL, "+
                     "FOREIGN KEY("+id_column+") REFERENCES "+ingredientsInProduct_table_name +"("+ingredientsInProduct_idProduct_column+")"+
                     ");";

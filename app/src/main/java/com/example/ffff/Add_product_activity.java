@@ -2,8 +2,10 @@ package com.example.ffff;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -34,6 +36,7 @@ public class Add_product_activity extends AppCompatActivity {
     //Ingredient_list_adp ingredient_adp;
     Button dialog_cancel_button;
     Button dialog_ok_button;
+    ArrayList<Ingredient>composition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +54,7 @@ public class Add_product_activity extends AppCompatActivity {
         for(int i =0;i<=ingredient_array.length-1;i++){ingredient_array[i]= ingredient_list.get(i).name;}
         ingredients_adp = new ArrayAdapter<String>(Add_product_activity.this, android.R.layout.simple_list_item_1, ingredient_array);
         ingredients.setAdapter(ingredients_adp);
+        composition = new ArrayList<>();
         ingredients.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -84,14 +88,17 @@ public class Add_product_activity extends AppCompatActivity {
                     public void onClick(View view) {
                         Ingredient added_ingredient = new Ingredient();
                         try{
-                            added_ingredient.name = enter_name.getText().toString();
+                            added_ingredient.name = ingredients_adp.getItem(pos);
                             added_ingredient.relWeight = Integer.valueOf(enter_weight.getText().toString());
                             added_ingredient.type_of_ingredient = ingredient_list.get(pos).type_of_ingredient;
                             added_ingredient.method_of_cook = choose_method_of_cook.getSelectedItem().toString();
                             ingredient_in_product_list.add(added_ingredient);
+                            ingredients_in_product_adp.notifyDataSetChanged();
+                            composition.add(added_ingredient);
                         }catch (Exception e){
                             Toast.makeText(Add_product_activity.this,R.string.wrong_data_entered,Toast.LENGTH_SHORT).show();
                             add_in_composition_dialog.dismiss();
+                            e.printStackTrace();
                         }
 
                         add_in_composition_dialog.dismiss();
@@ -100,7 +107,44 @@ public class Add_product_activity extends AppCompatActivity {
             add_in_composition_dialog.show();
             }
         });
+        ingredients_in_product.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                AlertDialog.Builder confirming_dialog_builder = new AlertDialog.Builder(new ContextThemeWrapper(Add_product_activity.this, R.style.alert_dialog_style))
+                        .setMessage(R.string.are_you_sure).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ingredient_in_product_list.remove(pos);
+                                ingredients_in_product_adp.notifyDataSetChanged();
+                                composition.remove(pos);
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                AlertDialog confirming_dialog = confirming_dialog_builder.create();
+                confirming_dialog.show();
+                return true;
+            }
+        });
+    enter_name = findViewById(R.id.add_product_activity_enter_name);
+    complete = findViewById(R.id.add_product_activity_complete);
+    complete.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (composition.isEmpty() || enter_name.getText().equals(null))
+                Toast.makeText(Add_product_activity.this,R.string.wrong_product_fill,Toast.LENGTH_SHORT).show();
+            else{
+                Product prod = db.add_product(enter_name.getText().toString(), composition);
 
-
+                Intent intent = new Intent(Add_product_activity.this,List_activity.class);
+                intent.putExtra(List_activity.type_arg,2);
+                startActivity(intent);
+            }
+        }
+    });
     }
 }
