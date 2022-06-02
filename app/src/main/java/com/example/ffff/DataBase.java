@@ -113,13 +113,28 @@ public class DataBase {
         db.insert(ingredients_table_name,null,cv);
     }
     public Product add_product(String name, ArrayList<Ingredient>composition){
-        ContentValues cv = new ContentValues();
+        ContentValues ingredients_in_product_cv = new ContentValues();
+        ContentValues product_cv = new ContentValues();
+        Cursor ingredient_cursor;
+        //Cursor product_cursor;
         long sum_weight = 0;
+        product_cv.put(name_column,name);
+
         for (int i = 0; i< composition.size();i++){
             sum_weight += composition.get(i).relWeight;
         }
         for (int i = 0; i< composition.size();i++){
+            ingredient_cursor = db.query(ingredients_table_name,new String[]{id_column},
+                    name+"="+composition.get(i).name, null,
+                    null,null,null);
+            ingredient_cursor.moveToFirst();
+            if(!ingredient_cursor.isAfterLast()){
+                ingredients_in_product_cv.put(ingredientsInProduct_methodOfCookId_column, composition.get(i).method_of_cook_id);
+                ingredients_in_product_cv.put(ingredientsInProduct_idIngredient_column,ingredient_cursor.getInt(0));
+                ingredients_in_product_cv.put(ingredientsInProduct_relativeWeight_column,
+                        Float.valueOf(String.format(("%.2f"),composition.get(i).relWeight/sum_weight)));
 
+            }
         }
     }
     class OpenHelper extends SQLiteOpenHelper{

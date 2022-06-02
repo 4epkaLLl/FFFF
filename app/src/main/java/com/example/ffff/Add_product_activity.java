@@ -92,6 +92,11 @@ public class Add_product_activity extends AppCompatActivity {
                             added_ingredient.relWeight = Integer.valueOf(enter_weight.getText().toString());
                             added_ingredient.type_of_ingredient = ingredient_list.get(pos).type_of_ingredient;
                             added_ingredient.method_of_cook = choose_method_of_cook.getSelectedItem().toString();
+                            for(int i= 0; i< methods_of_cook.length;i++){
+                                if (methods_of_cook[i].equals(added_ingredient.method_of_cook)){
+                                    added_ingredient.method_of_cook_id = i+1;
+                                }
+                            }
                             ingredient_in_product_list.add(added_ingredient);
                             ingredients_in_product_adp.notifyDataSetChanged();
                             composition.add(added_ingredient);
