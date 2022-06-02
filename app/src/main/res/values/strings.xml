@@ -4,8 +4,8 @@
     <string name="create">создать</string>
     <string name="weight">грамм</string>
     <string name="composition">состав</string>
-    <string name="enter_weight">масса</string>
-    <string name="calories">кал\100г</string>
+    <string name="enter_weight">масса(грамм)</string>
+    <string name="calories">Ккал\\100г</string>
     <string name="enter_name">введите название</string>
     <string name="add_products">добавьте продукты</string>
     <string name="ok">ок</string>

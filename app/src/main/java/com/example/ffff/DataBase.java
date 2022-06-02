@@ -1,19 +1,10 @@
 package com.example.ffff;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.CharArrayBuffer;
-import android.database.ContentObserver;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -47,7 +38,7 @@ public class DataBase {
     private static final String ingredientsInProduct_idProduct_column = "id_product";
     private static final String ingredientsInProduct_idIngredient_column = "id_ingredient";
     private static final String ingredientsInProduct_methodOfCookId_column = "method_of_cook_id";
-    private static final String ingredientsInProduct_relativeWeight_column = "relative_weight";
+    private static final String ingredientsInProduct_Weight_column = "weight";
 
     //Type_of_ingredient table
     private static final String typeOfIngredient_table_name = "Type_of_ingredient";
@@ -93,13 +84,14 @@ public class DataBase {
         Cursor products_table = db.query(product_table_name,
                 null,null,null,null,null,null);
         products_table.moveToFirst();
+        arr.clear();
         if(!products_table.isAfterLast()){
-            int i = 1;
+            int i = 0;
             do{
-                arr.get(i).name = products_table.getString(1);
-                arr.get(i).weight = products_table.getInt(2);
-                arr.get(i).calories_per_gram = products_table.getFloat(3);
-                i++;
+                Product p = new Product();
+                p.name = products_table.getString(1);
+                p.calories_per_gram = products_table.getFloat(2);
+                arr.add(p);
             }while(products_table.moveToNext());
             products_table.close();
         }
@@ -117,31 +109,32 @@ public class DataBase {
         ContentValues product_cv = new ContentValues();
         Cursor ingredient_cursor;
         Cursor product_cursor;
-        int product_id =0;
+        long product_id =0;
         long sum_weight = 0;
+        float total_weight = 0;
+        float total_calories =0;
         product_cv.put(name_column,name);
-        db.insert(product_table_name,null,product_cv);
-        product_cursor = db.query(product_table_name,new String[]{id_column},
-                name_column+"="+name,null,null,null,null);
-        product_cursor.moveToFirst();
-        if(!product_cursor.isAfterLast()) product_id = product_cursor.getInt(0);
+        product_id = db.insert(product_table_name,null,product_cv);
         for (int i = 0; i< composition.size();i++){
-            sum_weight += composition.get(i).relWeight;
-        }
-        for (int i = 0; i< composition.size();i++){
-            ingredient_cursor = db.query(ingredients_table_name,new String[]{id_column},
-                    name+"="+composition.get(i).name, null,
+            ingredient_cursor = db.query(ingredients_table_name,new String[]{id_column,ingredients_caloriesPerGram_column},
+                    name_column+"=?", new String[]{composition.get(i).name},
                     null,null,null);
             ingredient_cursor.moveToFirst();
             if(!ingredient_cursor.isAfterLast()){
                 ingredients_in_product_cv.put(ingredientsInProduct_methodOfCookId_column, composition.get(i).method_of_cook_id);
                 ingredients_in_product_cv.put(ingredientsInProduct_idIngredient_column,ingredient_cursor.getInt(0));
                 ingredients_in_product_cv.put(ingredientsInProduct_idProduct_column,product_id);
-                ingredients_in_product_cv.put(ingredientsInProduct_relativeWeight_column,
-                        Float.valueOf(String.format(("%.2f"),composition.get(i).relWeight/sum_weight)));
+                ingredients_in_product_cv.put(ingredientsInProduct_Weight_column,composition.get(i).weight);
                 db.insert(ingredientsInProduct_table_name,null,ingredients_in_product_cv);
+
+                total_calories+=composition.get(i).weight*0.01*ingredient_cursor.getFloat(1);
+                total_weight+= composition.get(i).weight;
             }
         }
+
+        product_cv = new ContentValues();
+        product_cv.put(product_vrgCalories_column,total_calories/total_weight);
+        db.update(product_table_name,product_cv,id_column+"=?",new String[]{Long.toString(product_id)});
     }
     class OpenHelper extends SQLiteOpenHelper{
         private Context ctx;
@@ -166,7 +159,7 @@ public class DataBase {
                     ingredientsInProduct_idProduct_column + " INTEGER NOT NULL, " +
                     ingredientsInProduct_idIngredient_column + " INTEGER NOT NULL, " +
                     ingredientsInProduct_methodOfCookId_column + " INTEGER NOT NULL, " +
-                    ingredientsInProduct_relativeWeight_column + " FLOAT NOT NULL," +
+                    ingredientsInProduct_Weight_column + " FLOAT NOT NULL," +
                     "FOREIGN KEY("+ingredientsInProduct_methodOfCookId_column+") REFERENCES "+ methodOfCook_table_name+"("+id_column+"));";
             db.execSQL(query);
             query = "CREATE TABLE "+ productsInDay_table_name+" (" +

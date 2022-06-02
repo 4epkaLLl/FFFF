@@ -20,7 +20,7 @@ public class Product_list_adp extends ArrayAdapter {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.product_list_item, null);
         }
         ((TextView)convertView.findViewById(R.id.product_list_adp_product_name)).setText(pr.name);
-        ((TextView)convertView.findViewById(R.id.product_list_adp_product_vrg_calories)).setText(String.valueOf(pr.calories_per_gram));
+        ((TextView)convertView.findViewById(R.id.product_list_adp_product_vrg_calories)).setText(String.valueOf(pr.calories_per_gram*100)+"Ккал/100г");
         return convertView;
     }
 }

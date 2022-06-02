@@ -7,5 +7,5 @@ public class Ingredient {
     public double calories_per_gram;
     public String method_of_cook;
     public int method_of_cook_id;
-    public int relWeight;
+    public int weight;
 }

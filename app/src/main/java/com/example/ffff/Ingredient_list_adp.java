@@ -21,7 +21,7 @@ public class Ingredient_list_adp extends ArrayAdapter {
         }
         ((TextView)convertView.findViewById(R.id.ingredient_list_item_ingredient_name)).setText(ing.name);
         ((TextView)convertView.findViewById(R.id.ingredient_list_item_ingredient_type)).setText(ing.type_of_ingredient);
-        ((TextView)convertView.findViewById(R.id.ingredient_list_item_vrg_calories)).setText(String.valueOf(ing.calories_per_gram));
+        ((TextView)convertView.findViewById(R.id.ingredient_list_item_vrg_calories)).setText(String.valueOf(Math.round(ing.calories_per_gram*100))+" Ккал/100г");
         return convertView;
 
     }

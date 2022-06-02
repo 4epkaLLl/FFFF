@@ -112,12 +112,11 @@ public class List_activity extends AppCompatActivity {
                                 for(int i = 0;i<=types.length-1;i++){
                                     if(types[i].equals(created_ingredient.type_of_ingredient)){
                                         created_ingredient.type_of_ingredient_id = i+1;
-                                        System.out.println(i);
                                         break;
                                     }else continue;
                                 }
                                 try{
-                                    created_ingredient.calories_per_gram = Integer.valueOf(String.valueOf(enter_vrg_calories_et.getText()));
+                                    created_ingredient.calories_per_gram = Double.valueOf(String.valueOf(enter_vrg_calories_et.getText()))/100.0;
                                     addIngredient.dismiss();
                                     db.add_ingredient(created_ingredient);
                                 }catch (NumberFormatException e){

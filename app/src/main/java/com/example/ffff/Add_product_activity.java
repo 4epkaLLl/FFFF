@@ -89,7 +89,7 @@ public class Add_product_activity extends AppCompatActivity {
                         Ingredient added_ingredient = new Ingredient();
                         try{
                             added_ingredient.name = ingredients_adp.getItem(pos);
-                            added_ingredient.relWeight = Integer.valueOf(enter_weight.getText().toString());
+                            added_ingredient.weight = Integer.valueOf(enter_weight.getText().toString());
                             added_ingredient.type_of_ingredient = ingredient_list.get(pos).type_of_ingredient;
                             added_ingredient.method_of_cook = choose_method_of_cook.getSelectedItem().toString();
                             for(int i= 0; i< methods_of_cook.length;i++){

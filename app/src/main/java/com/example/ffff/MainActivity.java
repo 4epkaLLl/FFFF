@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //getSupportActionBar().hide();
         toIngredients = findViewById(R.id.mainActivity_toIngredients);
-
         toIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
