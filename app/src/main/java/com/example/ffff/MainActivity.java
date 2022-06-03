@@ -23,12 +23,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //getSupportActionBar().hide();
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        /*calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
                 String picked_date = year +"."+month +"."+day;
             }
-        });
+        });*/
         toIngredients = findViewById(R.id.mainActivity_toIngredients);
         toIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
