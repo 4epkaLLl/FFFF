@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
         //getSupportActionBar().hide();
         calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
+                String picked_date = year +"."+month +"."+day;
             }
         });
         toIngredients = findViewById(R.id.mainActivity_toIngredients);
