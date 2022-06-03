@@ -55,6 +55,9 @@ public class DataBase {
     public void remove_ingredient(Ingredient in) {
         db.delete(ingredients_table_name,name_column+"=?",new String[]{in.name});
     }
+    public void remove_product(Product pr){
+        db.delete(product_table_name,name_column+"=?",new String[]{pr.name});
+    }
     public void get_ingredients(ArrayList<Ingredient> arr) {
         Cursor getIngredientsTable = db.query(ingredients_table_name,
                 new String[]{id_column, name_column, ingredients_type_column, ingredients_caloriesPerGram_column}, null, null, null, null, null);
@@ -126,7 +129,6 @@ public class DataBase {
                 ingredients_in_product_cv.put(ingredientsInProduct_idProduct_column,product_id);
                 ingredients_in_product_cv.put(ingredientsInProduct_Weight_column,composition.get(i).weight);
                 db.insert(ingredientsInProduct_table_name,null,ingredients_in_product_cv);
-
                 total_calories+=composition.get(i).weight*0.01*ingredient_cursor.getFloat(1);
                 total_weight+= composition.get(i).weight;
             }

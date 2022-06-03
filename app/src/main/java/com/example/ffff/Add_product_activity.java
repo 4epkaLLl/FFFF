@@ -52,7 +52,7 @@ public class Add_product_activity extends AppCompatActivity {
         db.get_ingredients(ingredient_list);
         String[]ingredient_array = new String[ingredient_list.size()];
         for(int i =0;i<=ingredient_array.length-1;i++){ingredient_array[i]= ingredient_list.get(i).name;}
-        ingredients_adp = new ArrayAdapter<String>(Add_product_activity.this, android.R.layout.simple_list_item_1, ingredient_array);
+        ingredients_adp = new ArrayAdapter<String>(Add_product_activity.this, R.layout.add_product_activity_ingredient_list_item, ingredient_array);
         ingredients.setAdapter(ingredients_adp);
         composition = new ArrayList<>();
         ingredients.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -116,6 +116,7 @@ public class Add_product_activity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 AlertDialog.Builder confirming_dialog_builder = new AlertDialog.Builder(new ContextThemeWrapper(Add_product_activity.this, R.style.alert_dialog_style))
+                        .setTitle(R.string.deleting_of_ingredient)
                         .setMessage(R.string.are_you_sure).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

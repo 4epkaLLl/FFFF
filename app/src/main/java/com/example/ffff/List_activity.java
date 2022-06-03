@@ -29,8 +29,8 @@ public class List_activity extends AppCompatActivity {
     DataBase db;
     FrameLayout ingredients_activity;
     TextView textView;
-    Ingredient_list_adp list_adp;
-    int deleted_ingredient_index;
+    Ingredient_list_adp ingredient_list_adp;
+    Product_list_adp product_list_adp;
     public static final String type_arg = "TYPE";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +45,8 @@ public class List_activity extends AppCompatActivity {
                 ArrayList<Ingredient> ingredients =new ArrayList<>();
                 db.get_ingredients(ingredients);
                 list = findViewById(R.id.list_activity_list);
-                list_adp = new Ingredient_list_adp(this, ingredients);
-                list.setAdapter(list_adp);
+                ingredient_list_adp = new Ingredient_list_adp(this, ingredients);
+                list.setAdapter(ingredient_list_adp);
                 textView = findViewById(R.id.list_is_empty);
                 if (ingredients.isEmpty()) {
                     textView.setText(this.getResources().getString(R.string.list_of_ingredients_is_empty));
@@ -56,17 +56,17 @@ public class List_activity extends AppCompatActivity {
                 }
                 list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
-                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        deleted_ingredient_index = i;
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int ind, long l) {
                         AlertDialog.Builder confirming_dialog_builder = new AlertDialog.Builder(new ContextThemeWrapper(List_activity.this, R.style.alert_dialog_style))
                                 .setMessage(R.string.are_you_sure).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        Ingredient deleted_ingredient =(Ingredient) list_adp.getItem(deleted_ingredient_index);
+                                        Ingredient deleted_ingredient =(Ingredient) ingredient_list_adp.getItem(ind);
                                         db.remove_ingredient(deleted_ingredient);
                                         ingredients.clear();
                                         db.get_ingredients(ingredients);
-                                        list_adp.notifyDataSetChanged();
+                                        ingredient_list_adp.notifyDataSetChanged();
+                                        if(ingredients.isEmpty()) textView.setText(R.string.list_of_ingredients_is_empty);
                                     }
                                 })
                                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -124,7 +124,7 @@ public class List_activity extends AppCompatActivity {
                                     Toast.makeText(List_activity.this,R.string.wrong_ingredient_fill,Toast.LENGTH_SHORT).show();
                                 }
                                 ingredients.add(created_ingredient);
-                                list_adp.notifyDataSetInvalidated();
+                                ingredient_list_adp.notifyDataSetInvalidated();
                                 textView.setText(null);
                             }
                         });
@@ -141,17 +141,44 @@ public class List_activity extends AppCompatActivity {
             }
             case (2):{
                 ArrayList<Product> products = new ArrayList<>();
-                products = db.get_products(products);
+                db.get_products(products);
+                textView = findViewById(R.id.list_is_empty);
                 if(products.isEmpty()){
-                    textView = findViewById(R.id.list_is_empty);
                     textView.setText(this.getResources().getString(R.string.list_of_products_is_empty));
                     textView.setVisibility(View.VISIBLE);
                 }else{
+
                     searchView = findViewById(R.id.list_activity_search_view);
                     list = findViewById(R.id.list_activity_list);
                     Product_list_adp prod_adp = new Product_list_adp(this,products);
                     list.setAdapter(prod_adp);
-
+                    list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                        @Override
+                        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int ind, long l) {
+                            AlertDialog.Builder confirming_dialog_builder = new AlertDialog.Builder(new ContextThemeWrapper(List_activity.this, R.style.alert_dialog_style))
+                                    .setTitle(R.string.deleting_of_product)
+                                    .setMessage(R.string.are_you_sure).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Product deleted_product =(Product) prod_adp.getItem(ind);
+                                            db.remove_product(deleted_product);
+                                            products.clear();
+                                            db.get_products(products);
+                                            prod_adp.notifyDataSetChanged();
+                                            if(products.isEmpty()) textView.setText(R.string.list_of_products_is_empty);
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            dialogInterface.cancel();
+                                        }
+                                    });
+                            AlertDialog confirming_dialog = confirming_dialog_builder.create();
+                            confirming_dialog.show();
+                            return true;
+                        }
+                    });
                 }
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override

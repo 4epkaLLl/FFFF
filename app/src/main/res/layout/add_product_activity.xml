@@ -18,6 +18,7 @@
         android:orientation="horizontal"
         android:columnCount="2">
         <TextView
+            android:layout_marginLeft="5dp"
             android:id="@+id/add_product_activity.composition"
             android:layout_width="205dp"
             android:layout_height="wrap_content"
@@ -25,6 +26,7 @@
             android:textColor="@color/white"
             android:textSize="18sp" />
         <TextView
+            android:layout_marginLeft="5dp"
             android:id="@+id/add_product_activity.ingredients"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
@@ -32,13 +34,17 @@
             android:textColor="@color/white"
             android:text="@string/add_products"/>
         <ListView
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_row="1"
             android:layout_column="0"
             android:id="@+id/add_product_activity.ingredients_in_product"
             android:layout_width="210dp"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
         <ListView
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginHorizontal="5dp"
             android:minHeight="55dp"
             android:id="@+id/add_product_activity.ingredients_list"
             android:layout_width="200dp"

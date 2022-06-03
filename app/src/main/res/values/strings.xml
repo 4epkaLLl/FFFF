@@ -9,6 +9,9 @@
     <string name="enter_name">введите название</string>
     <string name="add_products">добавьте продукты</string>
     <string name="ok">ок</string>
+    <string name="creating_ingredient">создать ингредиент</string>
+    <string name="deleting_of_ingredient">удалить ингредиент</string>
+    <string name="deleting_of_product">удалить продукт</string>
     <string name="wrong_ingredient_fill">неверно заполнен ингредиент</string>
     <string name="wrong_data_entered">неверно введены данные</string>
     <string name="are_you_sure">вы уверены?</string>
