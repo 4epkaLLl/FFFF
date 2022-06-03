@@ -19,8 +19,9 @@ public class Product_list_adp extends ArrayAdapter {
         if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.product_list_item, null);
         }
+        ((TextView)convertView.findViewById(R.id.product_list_adp_product_name)).setTextColor(getContext().getResources().getColor(R.color.white));
         ((TextView)convertView.findViewById(R.id.product_list_adp_product_name)).setText(pr.name);
-        ((TextView)convertView.findViewById(R.id.product_list_adp_product_vrg_calories)).setText(String.valueOf(pr.calories_per_gram*100)+"Ккал/100г");
+        ((TextView)convertView.findViewById(R.id.product_list_adp_product_vrg_calories)).setText(String.valueOf(pr.calories_per_gram*10000)+" Ккал/100г");
         return convertView;
     }
 }

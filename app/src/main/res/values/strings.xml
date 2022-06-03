@@ -8,6 +8,8 @@
     <string name="calories">Ккал\\100г</string>
     <string name="enter_name">введите название</string>
     <string name="add_products">добавьте продукты</string>
+    <string name="add_product">добавьте продукт</string>
+    <string name="enter_weight_of_product">введите массу продукта</string>
     <string name="ok">ок</string>
     <string name="creating_ingredient">создать ингредиент</string>
     <string name="deleting_of_ingredient">удалить ингредиент</string>
@@ -16,6 +18,8 @@
     <string name="wrong_data_entered">неверно введены данные</string>
     <string name="are_you_sure">вы уверены?</string>
     <string name="wrong_product_fill">неверно заполнен продукт</string>
+    <string name="list_products_isnt_added">продуктов не добавлено</string>
+    <string name="pick_day">выберите день</string>
     <string-array name="ingredient_types">
         <item>фрукт</item>
         <item>овощь</item>

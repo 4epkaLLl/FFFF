@@ -23,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class Add_product_activity extends AppCompatActivity {
-    DataBase db;
+    Data_base db;
     Ingredient_in_product_list_adp ingredients_in_product_adp;
     ArrayAdapter<String>ingredients_adp;
     EditText enter_name_in_dialog;
@@ -42,7 +42,7 @@ public class Add_product_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_product_activity);
         getSupportActionBar().hide();
-        db = new DataBase(this);
+        db = new Data_base(this);
         ingredients = findViewById(R.id.add_product_activity_ingredients_list);
         ingredients_in_product = findViewById(R.id.add_product_activity_ingredients_in_product);
         ArrayList<Ingredient> ingredient_in_product_list = new ArrayList<>();

@@ -1,5 +1,6 @@
 package com.example.ffff;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,7 +27,7 @@ public class List_activity extends AppCompatActivity {
     SearchView searchView;
     ListView list;
     Button add;
-    DataBase db;
+    Data_base db;
     FrameLayout ingredients_activity;
     TextView textView;
     Ingredient_list_adp ingredient_list_adp;
@@ -37,7 +38,7 @@ public class List_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_activity);
         getSupportActionBar().hide();
-        db = new DataBase(this);
+        db = new Data_base(this);
         add = findViewById(R.id.list_activity_add_button);
         int type = getIntent().getIntExtra(type_arg,0);
         switch (type){
@@ -51,13 +52,12 @@ public class List_activity extends AppCompatActivity {
                 if (ingredients.isEmpty()) {
                     textView.setText(this.getResources().getString(R.string.list_of_ingredients_is_empty));
                     textView.setVisibility(View.VISIBLE);
-                } else {
-                    searchView = findViewById(R.id.list_activity_search_view);
                 }
                 list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int ind, long l) {
                         AlertDialog.Builder confirming_dialog_builder = new AlertDialog.Builder(new ContextThemeWrapper(List_activity.this, R.style.alert_dialog_style))
+                                .setTitle(R.string.deleting_of_ingredient)
                                 .setMessage(R.string.are_you_sure).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -147,8 +147,6 @@ public class List_activity extends AppCompatActivity {
                     textView.setText(this.getResources().getString(R.string.list_of_products_is_empty));
                     textView.setVisibility(View.VISIBLE);
                 }else{
-
-                    searchView = findViewById(R.id.list_activity_search_view);
                     list = findViewById(R.id.list_activity_list);
                     Product_list_adp prod_adp = new Product_list_adp(this,products);
                     list.setAdapter(prod_adp);

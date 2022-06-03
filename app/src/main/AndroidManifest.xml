@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FFFF">
         <activity
-            android:name=".MainActivity"
+            android:name=".Main_activity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +20,7 @@
         </activity>
         <activity android:name=".List_activity"/>
         <activity android:name=".Add_product_activity"/>
+        <activity android:name=".Add_product_in_day_activity"/>
     </application>
 
 </manifest>

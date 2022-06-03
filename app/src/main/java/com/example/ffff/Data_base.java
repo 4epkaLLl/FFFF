@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
-public class DataBase {
+public class Data_base {
     private static final String DATABASE_NAME = "simple.db";
     private static final int DATABASE_VERSION = 1;
     private static final String id_column = "id";
@@ -32,6 +32,7 @@ public class DataBase {
     private static final String productsInDay_table_name = "Products_in_day";
     private static final String productsInDay_idDay_column = "id_day";
     private static final String productsInDay_idProducts_column = "id_products";
+    private static final String productsInDay_productWeight_column = "product_weight";
 
     //Ingredients_in_product table
     private static final String ingredientsInProduct_table_name = "Ingredients_in_product";
@@ -48,7 +49,7 @@ public class DataBase {
     private static final String methodOfCook_table_name = "Method_of_cook";
     private static final String methodOfCook_methodOfCook_column = "method_of_cook";
 
-    public DataBase(Context context) {
+    public Data_base(Context context) {
         OpenHelper openHelper = new OpenHelper(context);
         db = openHelper.getWritableDatabase();
     }
@@ -83,6 +84,52 @@ public class DataBase {
         }
         getIngredientsTable.close();
     }
+    public ArrayList<Product> get_product_list_by_day(String date){
+        Cursor day_crs = db.query(days_table_name,new String[]{id_column}
+                ,days_table_day+"=?", new String[]{date},
+                null,null,null);
+        day_crs.moveToFirst();
+        ArrayList<Product> final_arr= new ArrayList<>();
+        if(day_crs.isAfterLast()){
+            ContentValues cv = new ContentValues();
+            cv.put(days_table_day,date);
+            long id_d=db.insert(days_table_name,null,cv);
+            cv = new ContentValues();
+            cv.put(productsInDay_idDay_column,id_d);
+            System.out.println("не было такого дня, а теперь есть");
+            return final_arr;
+        }
+        else{
+            Integer id_day = day_crs.getInt(0);
+            System.out.println(id_day);
+            Cursor products_in_day_crs = db.query(productsInDay_table_name,
+                    new String[]{productsInDay_idDay_column},productsInDay_idDay_column+"=?"
+                    ,new String[]{String.valueOf(id_day)},null,null,null);
+            products_in_day_crs.moveToFirst();
+            if(products_in_day_crs.isAfterLast()){
+                System.out.println("не");
+                products_in_day_crs.close();
+                return final_arr;
+            }
+            else{
+                Cursor products_crs;
+                do{
+                    products_crs = db.query(
+                            product_table_name,new String[]{name_column,product_vrgCalories_column},
+                            id_column+"=?",new String[]{products_in_day_crs.getString(0)},
+                            null,null,null);
+                    Product p = new Product();
+                    p.name = products_crs.getString(0);
+                    p.calories_per_gram = products_crs.getFloat(1);
+                    final_arr.add(p);
+                }while(products_in_day_crs.moveToNext());
+                products_in_day_crs.close();
+                products_crs.close();
+            }
+        }
+        day_crs.close();
+        return final_arr;
+    }
     public ArrayList<Product>get_products(ArrayList<Product>arr){
         Cursor products_table = db.query(product_table_name,
                 null,null,null,null,null,null);
@@ -111,9 +158,7 @@ public class DataBase {
         ContentValues ingredients_in_product_cv = new ContentValues();
         ContentValues product_cv = new ContentValues();
         Cursor ingredient_cursor;
-        Cursor product_cursor;
         long product_id =0;
-        long sum_weight = 0;
         float total_weight = 0;
         float total_calories =0;
         product_cv.put(name_column,name);
@@ -135,8 +180,20 @@ public class DataBase {
         }
 
         product_cv = new ContentValues();
-        product_cv.put(product_vrgCalories_column,total_calories/total_weight);
+        product_cv.put(product_vrgCalories_column,(Math.round(total_calories/total_weight*10000))/10000.);
+        System.out.println(String.valueOf(Math.round(total_calories/total_weight*10000)/10000.));
         db.update(product_table_name,product_cv,id_column+"=?",new String[]{Long.toString(product_id)});
+    }
+    public void add_product_in_day(float weight,int index,String date){
+        Cursor cursor = db.query(days_table_name,new String[]{id_column},
+                days_table_day+"=?",new String[]{date},null,null,null);
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()){
+            ContentValues contentValues =new ContentValues();
+            contentValues.put(productsInDay_idDay_column,cursor.getInt(0));
+            contentValues.put(productsInDay_idProducts_column,index);
+            contentValues.put(productsInDay_productWeight_column,weight);
+        }
     }
     class OpenHelper extends SQLiteOpenHelper{
         private Context ctx;
@@ -168,7 +225,7 @@ public class DataBase {
                     id_column + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     productsInDay_idDay_column + " INTEGER NOT NULL, " +
                     productsInDay_idProducts_column + " INTEGER NOT NULL, "+
-
+                    productsInDay_productWeight_column +" INTEGER NOT NULL, "+
                     "FOREIGN KEY("+productsInDay_idProducts_column+") REFERENCES "+ product_table_name+"("+id_column+"));";
             db.execSQL(query);query = "CREATE TABLE " + ingredients_table_name + " (" +
                     id_column + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -182,7 +239,6 @@ public class DataBase {
             query = "CREATE TABLE " +product_table_name+"(" +
                     id_column +" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     name_column + " TEXT NOT NULL UNIQUE, "+
-                    //product_weight_column + " INTEGER, "+
                     product_vrgCalories_column + " REAL, "+
                     "FOREIGN KEY("+id_column+") REFERENCES "+ingredientsInProduct_table_name +"("+ingredientsInProduct_idProduct_column+")"+
                     ");";
