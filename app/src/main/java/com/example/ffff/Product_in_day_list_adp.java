@@ -20,7 +20,7 @@ public class Product_in_day_list_adp extends ArrayAdapter {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.product_in_day_list_item, null);
         }
         ((TextView)convertView.findViewById(R.id.main_activity_list_item_name)).setText(prod.name);
-        ((TextView)convertView.findViewById(R.id.main_activity_list_item_vrg_calories)).setText(prod.weight+"г / "+prod.calories_per_gram*prod.weight*10000+" Ккал");
+        ((TextView)convertView.findViewById(R.id.main_activity_list_item_vrg_calories)).setText(prod.weight+"г / "+prod.calories_per_gram*prod.weight*1000+" Ккал");
         return convertView;
     }
 }
