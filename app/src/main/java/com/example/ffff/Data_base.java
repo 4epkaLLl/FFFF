@@ -84,50 +84,39 @@ public class Data_base {
         }
         getIngredientsTable.close();
     }
-    public ArrayList<Product> get_product_list_by_day(String date){
-        Cursor day_crs = db.query(days_table_name,new String[]{id_column}
-                ,days_table_day+"=?", new String[]{date},
-                null,null,null);
-        day_crs.moveToFirst();
-        ArrayList<Product> final_arr= new ArrayList<>();
-        if(day_crs.isAfterLast()){
-            ContentValues cv = new ContentValues();
-            cv.put(days_table_day,date);
-            long id_d=db.insert(days_table_name,null,cv);
-            cv = new ContentValues();
-            cv.put(productsInDay_idDay_column,id_d);
-            System.out.println("не было такого дня, а теперь есть");
+    public ArrayList<Product_with_weight> get_product_list_by_day(long id_day){
+
+        ArrayList<Product_with_weight>  final_arr = new ArrayList<>();
+        System.out.println(id_day);
+        Cursor products_in_day_crs = db.query(productsInDay_table_name,
+                new String[]{productsInDay_idProducts_column,id_column,productsInDay_idDay_column,productsInDay_productWeight_column},productsInDay_idDay_column+"=?"
+                ,new String[]{String.valueOf(id_day)},null,null,null);
+        products_in_day_crs.moveToFirst();
+        if(products_in_day_crs.isAfterLast()){
+            System.out.println("не");
+            products_in_day_crs.close();
             return final_arr;
         }
         else{
-            Integer id_day = day_crs.getInt(0);
-            System.out.println(id_day);
-            Cursor products_in_day_crs = db.query(productsInDay_table_name,
-                    new String[]{productsInDay_idDay_column},productsInDay_idDay_column+"=?"
-                    ,new String[]{String.valueOf(id_day)},null,null,null);
-            products_in_day_crs.moveToFirst();
-            if(products_in_day_crs.isAfterLast()){
-                System.out.println("не");
-                products_in_day_crs.close();
-                return final_arr;
-            }
-            else{
-                Cursor products_crs;
-                do{
-                    products_crs = db.query(
-                            product_table_name,new String[]{name_column,product_vrgCalories_column},
-                            id_column+"=?",new String[]{products_in_day_crs.getString(0)},
-                            null,null,null);
-                    Product p = new Product();
+            Cursor products_crs;
+            do{
+                products_crs = db.query(
+                        product_table_name,new String[]{name_column,product_vrgCalories_column},
+                        id_column+"=?",new String[]{""+products_in_day_crs.getLong(0)},
+                        null,null,null);
+                products_crs.moveToFirst();
+                if(!products_crs.isAfterLast()){
+                    Product_with_weight p = new Product_with_weight();
                     p.name = products_crs.getString(0);
                     p.calories_per_gram = products_crs.getFloat(1);
+                    p.weight = products_in_day_crs.getInt(3);
                     final_arr.add(p);
-                }while(products_in_day_crs.moveToNext());
-                products_in_day_crs.close();
+                }
                 products_crs.close();
-            }
+            }while(products_in_day_crs.moveToNext());
+            products_in_day_crs.close();
         }
-        day_crs.close();
+
         return final_arr;
     }
     public ArrayList<Product>get_products(ArrayList<Product>arr){
@@ -139,7 +128,28 @@ public class Data_base {
             int i = 0;
             do{
                 Product p = new Product();
+                p.id = products_table.getLong(0);
                 p.name = products_table.getString(1);
+                //p.weight = products_table.getInt(3);
+                p.calories_per_gram = products_table.getFloat(2);
+                arr.add(p);
+            }while(products_table.moveToNext());
+            products_table.close();
+        }
+        return arr;
+    }
+    public ArrayList<Product_with_weight>get_product_with_weight(ArrayList<Product_with_weight> arr){
+        Cursor products_table = db.query(product_table_name,
+                null,null,null,null,null,null);
+        products_table.moveToFirst();
+        arr.clear();
+        if(!products_table.isAfterLast()){
+            int i = 0;
+            do{
+                Product_with_weight p = new Product_with_weight();
+                p.id = products_table.getLong(0);
+                p.name = products_table.getString(1);
+                p.weight = products_table.getInt(3);
                 p.calories_per_gram = products_table.getFloat(2);
                 arr.add(p);
             }while(products_table.moveToNext());
@@ -154,7 +164,8 @@ public class Data_base {
         cv.put(ingredients_type_column, ingredient.type_of_ingredient_id);
         db.insert(ingredients_table_name,null,cv);
     }
-    public void add_product(String name, ArrayList<Ingredient>composition){
+    public void add_product(String name,
+                            ArrayList<Ingredient>composition){
         ContentValues ingredients_in_product_cv = new ContentValues();
         ContentValues product_cv = new ContentValues();
         Cursor ingredient_cursor;
@@ -184,16 +195,32 @@ public class Data_base {
         System.out.println(String.valueOf(Math.round(total_calories/total_weight*10000)/10000.));
         db.update(product_table_name,product_cv,id_column+"=?",new String[]{Long.toString(product_id)});
     }
-    public void add_product_in_day(float weight,int index,String date){
-        Cursor cursor = db.query(days_table_name,new String[]{id_column},
-                days_table_day+"=?",new String[]{date},null,null,null);
-        cursor.moveToFirst();
-        if (!cursor.isAfterLast()){
-            ContentValues contentValues =new ContentValues();
-            contentValues.put(productsInDay_idDay_column,cursor.getInt(0));
-            contentValues.put(productsInDay_idProducts_column,index);
-            contentValues.put(productsInDay_productWeight_column,weight);
+    public long get_or_create_day(String date){
+        Cursor day_crs = db.query(days_table_name,new String[]{id_column}
+                ,days_table_day+"=?", new String[]{date},
+                null,null,null);
+        day_crs.moveToFirst();
+        ArrayList<Product> final_arr= new ArrayList<>();
+        if(day_crs.isAfterLast()){
+            ContentValues cv = new ContentValues();
+            cv.put(days_table_day,date);
+            long id_d=db.insert(days_table_name,null,cv);
+            day_crs.close();
+            return id_d;
         }
+        else {
+            long result = day_crs.getLong(0);
+            day_crs.close();
+            return  result;
+        }
+
+    }
+    public void add_product_in_day(float weight,long index,long dayId){
+        ContentValues contentValues =new ContentValues();
+        contentValues.put(productsInDay_idDay_column,dayId);
+        contentValues.put(productsInDay_idProducts_column,index);
+        contentValues.put(productsInDay_productWeight_column,weight);
+        db.insert(productsInDay_table_name,null,contentValues);
     }
     class OpenHelper extends SQLiteOpenHelper{
         private Context ctx;
@@ -240,6 +267,7 @@ public class Data_base {
                     id_column +" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     name_column + " TEXT NOT NULL UNIQUE, "+
                     product_vrgCalories_column + " REAL, "+
+
                     "FOREIGN KEY("+id_column+") REFERENCES "+ingredientsInProduct_table_name +"("+ingredientsInProduct_idProduct_column+")"+
                     ");";
             db.execSQL(query);

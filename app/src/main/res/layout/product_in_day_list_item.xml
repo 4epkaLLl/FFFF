@@ -4,8 +4,9 @@
     android:layout_height="40dp"
     android:orientation="horizontal">
     <TextView
+        android:layout_marginLeft="10dp"
         android:textSize="20sp"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_weight="1"
         android:id="@+id/main_activity.list_item.name"
         android:layout_width="match_parent"

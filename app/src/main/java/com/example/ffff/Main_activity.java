@@ -41,16 +41,18 @@ public class Main_activity extends AppCompatActivity {
                 if (day<10) day_str = "0"+day;
                 else day_str = ""+day;
                 String picked_date = year +"."+month_str +"."+day_str;
-                ArrayList<Product> productsList = db.get_product_list_by_day(picked_date);
+                long dayId = db.get_or_create_day(picked_date);
+                ArrayList<Product_with_weight> productsList = db.get_product_list_by_day(dayId);
                 products_in_day = findViewById(R.id.mainActivity_listOfProductsInDay);
                 products_in_day_adp = new Product_in_day_list_adp(Main_activity.this, productsList);
                 products_in_day.setAdapter(products_in_day_adp);
+                if(!productsList.isEmpty()) list_is_empty.setText("");
                 add = findViewById(R.id.main_activity_rounded_btn);
                 add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(Main_activity.this, Add_product_in_day_activity.class);
-                        intent.putExtra("TYPE",picked_date);
+                        intent.putExtra("TYPE",dayId);
                         startActivity(intent);
                     }
                 });

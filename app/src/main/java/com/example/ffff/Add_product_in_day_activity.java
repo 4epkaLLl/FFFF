@@ -38,6 +38,7 @@ public class Add_product_in_day_activity extends AppCompatActivity {
                 Button ok_btn = enter_weight_dialog.findViewById(R.id.add_product_in_day_dialog_ok_button);
                 Button cancel_button =enter_weight_dialog.findViewById(R.id.add_product_in_day_dialog_cancel_button);
                 enter_weight_dialog.setTitle(R.string.enter_weight_of_product);
+                Product p = (Product)list_adp.getItem(pos);
                 cancel_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -50,8 +51,9 @@ public class Add_product_in_day_activity extends AppCompatActivity {
                         try{
                             String weight = enter_weight.getText().toString();
                             weight.replace(",",".");
-                            db.add_product_in_day(Float.valueOf(weight),pos+1,
-                                getIntent().getStringExtra("TYPE"));
+
+                            db.add_product_in_day(Float.parseFloat(weight),p.id,
+                                getIntent().getLongExtra("TYPE",0));
                             Intent intent = new Intent(Add_product_in_day_activity.this,Main_activity.class);
                             startActivity(intent);
                         }catch (ClassCastException e){
